@@ -28,10 +28,10 @@ namespace Backend.API.Controllers
             Journey journey = new Journey();
             journey.Origin = inputParameters.Origin;
             journey.Destination = inputParameters.Destination;
-            journey.Price = totalPrice;
             List<Flight> result = new List<Flight>();
             SearchFlightsRecursive(journey.Origin, journey.Destination, result, 0, flights, inputParameters);
             journey.Flights = result;
+            journey.Price = CalculateTotalPrice(result);
             return Ok(journey);
         }
 
@@ -78,6 +78,16 @@ namespace Backend.API.Controllers
             }
 
             return false;
+        }
+
+        public double CalculateTotalPrice(List<Flight> result)
+        {
+            double totalPrice = 0.0;
+            foreach (var flight in result)
+            {
+                totalPrice += flight.Price;
+            }
+            return totalPrice;
         }
 
 
